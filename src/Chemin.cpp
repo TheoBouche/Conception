@@ -66,14 +66,25 @@ Chemin Chemin::calculerPlusCourt(const string & ville1,
 void Chemin::partitionner(const string & ville, Chemin & cheminAvec, 
         Chemin & cheminSans) const {
 
-  /*for(Route r :routes_)
+  for(Route r :routes_)
     {
-      if(r.villeA_==ville or r.villeB_==ville)
+      if(r.villeA_==ville)
 	{
-	  cheminAvec.
+	  cheminAvec.routes_.push_back(r);
 	}
-	}*/
-
+      else
+	{
+	  if(r.villeB_==ville)
+	    {
+	      swap(r.villeA_, r.villeB_);
+	      cheminAvec.routes_.push_back(r);
+	    }
+	  else
+	    {
+	      cheminSans.routes_.push_back(r);
+	    }
+	}
+    }
 }
 
 void Chemin::importerCsv(istream & is) {
@@ -104,7 +115,7 @@ void Chemin::exporterDot(ostream & os, const string & ville1,
 
   //chemin le plus court
   Chemin plus_court=calculerPlusCourt(ville1, ville2);
-  os<<"\t"<<ville1;
+  os<<"\t"<<plus_court.routes_[0].villeA_;
   for(Route r : plus_court.routes_)
     {
       os<<" -- "<<r.villeB_;
