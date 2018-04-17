@@ -21,9 +21,19 @@ int main(int argc, char ** argv) {
 
     try {
 
-        // TODO importer le fichier CSV
-
-        // TODO exporter le fichier dot correspondant
+      std::ifstream ifs(argv[1]);
+      if(ifs)
+	{
+	  Chemin c;
+	  c.importerCsv(ifs);
+	  ifs.close();
+	  std::ofstream ofs(argv[2]);
+	  if(ofs)
+	    {
+	      c.exporterDot(ofs, argv[3], argv[4]);
+	      ofs.close();
+	    }
+	}
 
     }
     catch (const string & msg) {

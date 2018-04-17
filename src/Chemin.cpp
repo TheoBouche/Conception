@@ -81,18 +81,41 @@ void Chemin::importerCsv(istream & is) {
   std::string s;
   while(is>>s)
     {
-      Route r;
-      r.villeA_=s;
-      is>>r.villeB_;
-      is>>r.distance_;
-      routes_.push_back(r);
+      try{
+	//on recupere une ligne et on ajoute la route correspondante
+	Route r;
+	r.villeA_=s;
+	is>>s;
+	r.villeB_=s;
+	is>>s;
+	r.distance_=stoi(s);
+	routes_.push_back(r);
+      }
+      catch(...){}
     }
 }
 
 void Chemin::exporterDot(ostream & os, const string & ville1, 
         const string & ville2) const {
 
-    // TODO
+  //entete
+  os<<"graph {\n";
+  os<<"\tsplines=line;\n";
 
+  //chemin le plus court
+  Chemin plus_court=calculerPlusCourt(ville1, ville2);
+  os<<"\t"<<ville1;
+  for(Route r : plus_court.routes_)
+    {
+      os<<" -- "<<r.villeB_;
+    }
+  os<<" [color=red, penwidth=3];\n";
+
+  //reste du graphe
+  for(Route r : routes_)
+    {
+      os<<"\t"<<r.villeA_<<" -- "<<r.villeB_<<" [label="<<r.distance_<<"];\n";
+    }
+  os<<"}";
 }
 
